@@ -19,8 +19,11 @@ class ViewController: UIViewController {
     
     private func configureUI() {
         let layout = UICollectionViewFlowLayout()
+        let viewWidth = view.frame.size.width
         layout.scrollDirection = .vertical
-        
+        layout.minimumLineSpacing = 1
+        layout.minimumInteritemSpacing = 1
+        layout.itemSize = CGSize(width: (viewWidth / 3) - 4, height: (viewWidth / 3) - 4)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
         guard let collectionView = collectionView else {
@@ -43,7 +46,11 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCell.identifier, for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCell.identifier, for: indexPath) as? CustomCell else {
+            fatalError("Cell Object does not exist")
+        }
+        
+        cell.configure(with: "House: \(indexPath.row + 1)")
         
         return cell
     }
